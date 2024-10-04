@@ -1,14 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<LangVersion>12</LangVersion>
+	<RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	  <PackageReference Include="Google.Protobuf" Version="3.28.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,6 +20,13 @@
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="rename &quot;$(TargetDir)$(AssemblyName).dll&quot; &quot;$(AssemblyName).plugins&quot;" />
+  </Target>
+  <Target Name="BeforeBuild">
+	<Delete Files="$(TargetDir)$(AssemblyName).dll" />
+	<Delete Files="$(TargetDir)$(AssemblyName).plugins" />
+  </Target>
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="del &quot;$(TargetDir)$(AssemblyName).dll&quot; &#xD;&#xA;del &quot;$(TargetDir)$(AssemblyName).plugins&quot;" />
   </Target>
 
 </Project>

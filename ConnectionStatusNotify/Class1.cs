@@ -2,6 +2,7 @@
 using System.Net;
 using SharedLibrary;
 using Proto.Cmd.Security;
+using System.Reflection;
 
 namespace ConnectionStatusNotify
 {
@@ -87,8 +88,8 @@ namespace ConnectionStatusNotify
                 GameHeartBeatNotifyRequest gh = GameHeartBeatNotifyRequest.Parser.ParseJson(req);
                 if (gh != null)
                 {
-                    Console.WriteLine($"{Platform.Android.GetType().Name} Count in {gh.PlatformUidList[(UInt32)Platform.Android].Uid.Count}");
-                    Console.WriteLine($"{Platform.Pc.GetType().Name} Count in {gh.PlatformUidList[(UInt32)Platform.Pc].Uid.Count}");
+                    Console.WriteLine($"{Enum.GetName(typeof(Platform), Platform.Android)} Count in {gh.PlatformUidList[(UInt32)Platform.Android].Uid.Count}");
+                    Console.WriteLine($"{Enum.GetName(typeof(Platform), Platform.Pc)} Count in {gh.PlatformUidList[(UInt32)Platform.Pc].Uid.Count}");
                     Console.WriteLine(UserList.Count);
                 }
                 else

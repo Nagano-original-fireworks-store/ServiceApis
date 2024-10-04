@@ -45,7 +45,7 @@ namespace Main
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Exception ex = (Exception)e.ExceptionObject;
-            Console.WriteLine($"异常类型：{ex.GetType().Name}");
+            Console.WriteLine($"异常类型：{ex.GetType().FullName}");
             Console.WriteLine($"异常消息：{ex.Message}");
             Console.WriteLine($"堆栈跟踪：{ex.StackTrace}");
             // Environment.Exit(1);
