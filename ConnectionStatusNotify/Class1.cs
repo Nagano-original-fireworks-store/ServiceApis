@@ -1,11 +1,7 @@
 ﻿// ConnectionStatusProvider.cs
-using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Text;
-using Newtonsoft.Json;
 using SharedLibrary;
-using static ConnectionStatusNotify.ConnectionStatusProvider;
+using Proto.Cmd.Security;
 
 namespace ConnectionStatusNotify
 {
@@ -39,13 +35,14 @@ namespace ConnectionStatusNotify
 
         private Response gameLoginNotify(HttpListenerRequest request)
         {
+            
             string? req = Http.Post(request);
             if (!string.IsNullOrEmpty(req))
             {
-                GameStatusNotify? gn = JsonConvert.DeserializeObject<GameStatusNotify>(req);
+                GameLoginNotifyRequest gn = GameLoginNotifyRequest.Parser.ParseJson(req);
                 if (gn != null)
                 {
-                    UserList.Add(gn.Value.Uid);
+                    UserList.Add(gn.Uid);
                 }
                 else
                 {
@@ -65,10 +62,10 @@ namespace ConnectionStatusNotify
             string? req = Http.Post(request);
             if (!string.IsNullOrEmpty(req))
             {
-                GameStatusNotify? gn = JsonConvert.DeserializeObject<GameStatusNotify>(req);
+                GameLogoutNotifyRequest gn = GameLogoutNotifyRequest.Parser.ParseJson(req);
                 if (gn != null)
                 {
-                    UserList.Remove(gn.Value.Uid);
+                    UserList.Remove(gn.Uid);
                 }
                 else
                 {
@@ -87,10 +84,11 @@ namespace ConnectionStatusNotify
             string? req = Http.Post(request);
             if (!string.IsNullOrEmpty(req))
             {
-                GameHeartNotify? gh = JsonConvert.DeserializeObject<GameHeartNotify>(req);
+                GameHeartBeatNotifyRequest gh = GameHeartBeatNotifyRequest.Parser.ParseJson(req);
                 if (gh != null)
                 {
-                    Console.WriteLine(gh.Value.PlatformUidList.Count);
+                    Console.WriteLine($"{Platform.Android.GetType().Name} Count in {gh.PlatformUidList[(UInt32)Platform.Android].Uid.Count}");
+                    Console.WriteLine($"{Platform.Pc.GetType().Name} Count in {gh.PlatformUidList[(UInt32)Platform.Pc].Uid.Count}");
                     Console.WriteLine(UserList.Count);
                 }
                 else
@@ -104,37 +102,6 @@ namespace ConnectionStatusNotify
                 Console.WriteLine("请求返回的字符串为 null 或空。");
             }
             return Rsp.NewResponse(Rsp.StatusCode.OK, null, Rsp.NewResponseJson(message: "OK"));
-        }
-        public struct GameStatusNotify
-        {
-            [JsonProperty("uid")]
-            public UInt32 Uid { get; set; }
-
-            [JsonProperty("account_type")]
-            public uint AccountType { get; set; }
-
-            [JsonProperty("account")]
-            public string Account { get; set; }
-
-            [JsonProperty("platform")]
-            public uint Platform { get; set; }
-
-            [JsonProperty("region")]
-            public string Region { get; set; }
-
-            [JsonProperty("biz_game")]
-            public string BizGame { get; set; }
-        }
-        public struct GameHeartNotify
-        {
-            [JsonProperty("platform_uid_list")]
-            public Dictionary<UInt32, UInt32[]> PlatformUidList { get; set; }
-
-            [JsonProperty("region")]
-            public string Region { get; set; }
-
-            [JsonProperty("biz_game")]
-            public string BizGame { get; set; }
         }
     }
 }

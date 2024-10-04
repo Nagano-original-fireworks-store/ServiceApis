@@ -61,7 +61,7 @@ namespace Main
                 Directory.CreateDirectory(pluginsDirectory);
             }
 
-            string[] dllFiles = Directory.GetFiles(pluginsDirectory, "*.dll");
+            string[] dllFiles = Directory.GetFiles(pluginsDirectory, "*.plugins");
 
             foreach (string dll in dllFiles)
             {
