@@ -11,7 +11,7 @@ namespace ConnectionStatusNotify
 {
     public class ConnectionStatusProvider : IRouteProvider
     {
-        List<uint> UserList = [];
+        List<UInt32> UserList = [];
         public Route[] GetRoutes()
         {
             return
@@ -27,19 +27,25 @@ namespace ConnectionStatusNotify
                     Path = "/bat/game/gameLogoutNotify",
                     Method = "POST",
                     Handler = gameLogoutNotify
+                },
+                new Route
+                {
+                    Path = "/bat/game/gameHeartBeatNotify",
+                    Method = "POST",
+                    Handler = gameHeartBeatNotify
                 }
             ];
         }
 
         private Response gameLoginNotify(HttpListenerRequest request)
         {
-            string? req = Http.Post(request);           
+            string? req = Http.Post(request);
             if (!string.IsNullOrEmpty(req))
             {
-                GameLoginNotify? gn = JsonConvert.DeserializeObject<GameLoginNotify>(req);
+                GameStatusNotify? gn = JsonConvert.DeserializeObject<GameStatusNotify>(req);
                 if (gn != null)
                 {
-                    Console.WriteLine(gn);
+                    UserList.Add(gn.Value.Uid);
                 }
                 else
                 {
@@ -51,47 +57,78 @@ namespace ConnectionStatusNotify
             {
                 Console.WriteLine("请求返回的字符串为 null 或空。");
             }
-
-            Console.WriteLine(Http.Post(request));
             return Rsp.NewResponse(Rsp.StatusCode.OK, null, Rsp.NewResponseJson(message: "OK"));
         }
 
         private Response gameLogoutNotify(HttpListenerRequest request)
         {
-            string requestBody;
-            using (var reader = new System.IO.StreamReader(request.InputStream, request.ContentEncoding))
+            string? req = Http.Post(request);
+            if (!string.IsNullOrEmpty(req))
             {
-                requestBody = reader.ReadToEnd();
+                GameStatusNotify? gn = JsonConvert.DeserializeObject<GameStatusNotify>(req);
+                if (gn != null)
+                {
+                    UserList.Remove(gn.Value.Uid);
+                }
+                else
+                {
+                    Console.WriteLine("反序列化失败，返回 null。");
+                    // 根据需要处理此情况
+                }
             }
-
-            Console.WriteLine("收到通知：" + requestBody);
-
-            // 返回JSON响应
-            var responseData = new { message = "通知已收到", receivedData = requestBody };
-            string jsonResponse = Newtonsoft.Json.JsonConvert.SerializeObject(responseData);
-            byte[] buffer = Encoding.UTF8.GetBytes(jsonResponse);
-
-            return new Response
+            else
             {
-                StatusCode = 200,
-                ContentType = "application/json",
-                Content = buffer
-            };
+                Console.WriteLine("请求返回的字符串为 null 或空。");
+            }
+            return Rsp.NewResponse(Rsp.StatusCode.OK, null, Rsp.NewResponseJson(message: "OK"));
         }
-
-        public struct GameLoginNotify
+        private Response gameHeartBeatNotify(HttpListenerRequest request)
+        {
+            string? req = Http.Post(request);
+            if (!string.IsNullOrEmpty(req))
+            {
+                GameHeartNotify? gh = JsonConvert.DeserializeObject<GameHeartNotify>(req);
+                if (gh != null)
+                {
+                    Console.WriteLine(gh.Value.PlatformUidList.Count);
+                    Console.WriteLine(UserList.Count);
+                }
+                else
+                {
+                    Console.WriteLine("反序列化失败，返回 null。");
+                    // 根据需要处理此情况
+                }
+            }
+            else
+            {
+                Console.WriteLine("请求返回的字符串为 null 或空。");
+            }
+            return Rsp.NewResponse(Rsp.StatusCode.OK, null, Rsp.NewResponseJson(message: "OK"));
+        }
+        public struct GameStatusNotify
         {
             [JsonProperty("uid")]
-            public uint Uid { get; set; }
+            public UInt32 Uid { get; set; }
 
             [JsonProperty("account_type")]
             public uint AccountType { get; set; }
 
             [JsonProperty("account")]
-            public uint Account { get; set; }
+            public string Account { get; set; }
 
             [JsonProperty("platform")]
             public uint Platform { get; set; }
+
+            [JsonProperty("region")]
+            public string Region { get; set; }
+
+            [JsonProperty("biz_game")]
+            public string BizGame { get; set; }
+        }
+        public struct GameHeartNotify
+        {
+            [JsonProperty("platform_uid_list")]
+            public Dictionary<UInt32, UInt32[]> PlatformUidList { get; set; }
 
             [JsonProperty("region")]
             public string Region { get; set; }
