@@ -33,14 +33,25 @@ namespace ConnectionStatusNotify
 
         private Response gameLoginNotify(HttpListenerRequest request)
         {
-            GameLoginNotify gn = new GameLoginNotify();
-            string req = Http.Post(request);
-            if (req != null) {
-                GameLoginNotify _ = (GameLoginNotify)JsonConvert.DeserializeObject(req);
-                gn = _;
-                Console.WriteLine(gn);
+            string? req = Http.Post(request);           
+            if (!string.IsNullOrEmpty(req))
+            {
+                GameLoginNotify? gn = JsonConvert.DeserializeObject<GameLoginNotify>(req);
+                if (gn != null)
+                {
+                    Console.WriteLine(gn);
+                }
+                else
+                {
+                    Console.WriteLine("反序列化失败，返回 null。");
+                    // 根据需要处理此情况
+                }
             }
-           
+            else
+            {
+                Console.WriteLine("请求返回的字符串为 null 或空。");
+            }
+
             Console.WriteLine(Http.Post(request));
             return Rsp.NewResponse(Rsp.StatusCode.OK, null, Rsp.NewResponseJson(message: "OK"));
         }
@@ -63,7 +74,7 @@ namespace ConnectionStatusNotify
             return new Response
             {
                 StatusCode = 200,
-                ContentType = "application/json; charset=utf-8",
+                ContentType = "application/json",
                 Content = buffer
             };
         }

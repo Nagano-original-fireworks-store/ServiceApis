@@ -12,6 +12,7 @@ namespace Main
     {
         static void Main(string[] args)
         {
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             string[] prefixes = { "http://localhost:5000/" };
             HttpListener listener = new HttpListener();
 
@@ -41,7 +42,14 @@ namespace Main
                 HandleRequest(context, routes);
             }
         }
-
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception ex = (Exception)e.ExceptionObject;
+            Console.WriteLine($"异常类型：{ex.GetType().Name}");
+            Console.WriteLine($"异常消息：{ex.Message}");
+            Console.WriteLine($"堆栈跟踪：{ex.StackTrace}");
+            // Environment.Exit(1);
+        }
         static List<Route> LoadRoutes()
         {
             List<Route> routes = new List<Route>();
