@@ -73,6 +73,10 @@ namespace Main
                     object? instance = Activator.CreateInstance(type);
                     if (instance is IRouteProvider provider)
                     {
+                        if (provider.IsNeedInit)
+                        {
+                            provider.Init();
+                        }
                         routes.AddRange(provider.GetRoutes());
                     }
                     else

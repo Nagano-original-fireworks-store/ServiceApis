@@ -9,12 +9,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConnectionStatusNotify", "C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedLibrary", "SharedLibrary\SharedLibrary.csproj", "{8222A946-F3AC-458A-AF9B-614657CF6F04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proto", "Protobuf\Proto.csproj", "{19144CE5-474D-4709-AF85-0DD626ABF7D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proto", "Protobuf\Proto.csproj", "{19144CE5-474D-4709-AF85-0DD626ABF7D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDK", "SDK\SDK.csproj", "{5C248665-A3F5-4CD1-9BB5-F45E902BEEF2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		Description = 面向客户端和服务端的HttpServer
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{BDAB8EBB-25FB-45F7-BB6D-FCA4C479426F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -33,6 +36,10 @@ Global
 		{19144CE5-474D-4709-AF85-0DD626ABF7D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19144CE5-474D-4709-AF85-0DD626ABF7D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19144CE5-474D-4709-AF85-0DD626ABF7D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C248665-A3F5-4CD1-9BB5-F45E902BEEF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C248665-A3F5-4CD1-9BB5-F45E902BEEF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C248665-A3F5-4CD1-9BB5-F45E902BEEF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C248665-A3F5-4CD1-9BB5-F45E902BEEF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -9,6 +9,9 @@ namespace ConnectionStatusNotify
     public class ConnectionStatusProvider : IRouteProvider
     {
         List<UInt32> UserList = [];
+        private bool isNeedInit = true;
+        public bool IsNeedInit => isNeedInit;
+        public void Init() { }
         public Route[] GetRoutes()
         {
             return

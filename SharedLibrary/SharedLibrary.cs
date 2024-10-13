@@ -212,5 +212,7 @@ namespace SharedLibrary
     public interface IRouteProvider
     {
         Route[] GetRoutes();
+        bool IsNeedInit { get; }
+        void Init();
     }
 }
