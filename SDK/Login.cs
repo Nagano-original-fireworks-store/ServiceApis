@@ -1,4 +1,5 @@
-﻿using SharedLibrary;
+﻿using MySql.Data.MySqlClient;
+using SharedLibrary;
 using System.Net;
 
 namespace SDK
@@ -35,13 +36,18 @@ namespace SDK
         private void Inits()
         {
             var manager = new MySQL();
-
-            // 初始化，传入连接字符串数组
+            MySqlConnectionStringBuilder connectionStringBuilder = new MySqlConnectionStringBuilder
+            {
+                Server = "localhost",
+                Port = 3306,
+                Database = "Database",
+                UserID = "root",
+                Password = "Password",
+                Pooling = false,
+            };
             manager.Init(new string[]
             {
-                "Server=localhost;Database=database1;User ID=root;Password=yourpassword;Pooling=true;",
-                "Server=localhost;Database=database2;User ID=root;Password=yourpassword;Pooling=true;"
-                // 可以添加更多的连接字符串
+                connectionStringBuilder.ToString(),
             });
         }
     }
